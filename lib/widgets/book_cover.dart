@@ -11,6 +11,7 @@ class BookCover extends StatelessWidget {
   final double width;
   final double height;
   final double radius;
+  final bool square;
 
   /// Тег для Hero-перехода. null — без анимации.
   final Object? heroTag;
@@ -22,16 +23,19 @@ class BookCover extends StatelessWidget {
     required this.height,
     this.radius = 8,
     this.heroTag,
+    this.square = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final w = width;
+    final h = square ? width : height;
     Widget cover = ClipRRect(
       borderRadius: BorderRadius.circular(radius),
       child: SizedBox(
-        width: width,
-        height: height,
-        child: _buildContent(context),
+        width: w,
+        height: h,
+        child: _buildContent(context, w),
       ),
     );
 
@@ -56,7 +60,7 @@ class BookCover extends StatelessWidget {
     return cover;
   }
 
-  Widget _buildContent(BuildContext context) {
+  Widget _buildContent(BuildContext context, double width) {
     final url = book.coverUrl;
     if (url != null && url.isNotEmpty) {
       if (url.startsWith('http')) {

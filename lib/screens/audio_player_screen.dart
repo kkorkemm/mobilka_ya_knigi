@@ -599,35 +599,43 @@ class _CoverWithGlow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        // Размытое свечение — та же обложка, но очень блюр и низкая прозрачность.
-        Opacity(
-          opacity: 0.45,
-          child: ImageFiltered(
-            imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
-            child: SizedBox(
-              width: 300,
-              height: 400,
+    // В плеере всегда квадратная обложка (как у музыкальных альбомов).
+    const w = 280.0;
+    const h = 280.0;
+    const glowW = w + 80;
+    const glowH = h + 80;
+
+    return SizedBox(
+      width: glowW,
+      height: glowH,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Размытое свечение
+          Opacity(
+            opacity: 0.55,
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
               child: BookCover(
                 book: book,
-                width: 300,
-                height: 400,
-                radius: 12,
+                width: glowW,
+                height: glowH,
+                radius: 24,
+                square: true,
               ),
             ),
           ),
-        ),
-        // Чёткая обложка
-        BookCover(
-          book: book,
-          width: 240,
-          height: 350,
-          radius: 6,
-          heroTag: 'player_${book.id}',
-        ),
-      ],
+          // Чёткая обложка
+          BookCover(
+            book: book,
+            width: w,
+            height: h,
+            radius: 10,
+            heroTag: 'player_${book.id}',
+            square: true,
+          ),
+        ],
+      ),
     );
   }
 }

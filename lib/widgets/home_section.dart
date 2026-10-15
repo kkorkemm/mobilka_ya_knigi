@@ -155,7 +155,7 @@ class AddBookButton extends StatelessWidget {
 
     return Center(
       child: SizedBox(
-        height: 48,
+        height: 40,
         child: ElevatedButton(
           onPressed: onTap,
           style: ElevatedButton.styleFrom(
@@ -163,16 +163,16 @@ class AddBookButton extends StatelessWidget {
             foregroundColor:
                 isDark ? const Color(0xFF1A1A1A) : Colors.white,
             elevation: 0,
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 18),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(18),
             ),
           ),
           child: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.add_rounded, size: 22),
-              SizedBox(width: 8),
+              Icon(Icons.add_rounded, size: 18),
+              SizedBox(width: 6),
               Text(
                 'Добавить книгу',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),

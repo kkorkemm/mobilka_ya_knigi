@@ -246,7 +246,7 @@ class _StatsCard extends StatelessWidget {
                 ),
                 Expanded(
                   child: _StatColumn(
-                    label: 'в сентябре',
+                    label: 'в октябре',
                     value: '${state.daysThisMonth} ${_pluralDays(state.daysThisMonth)}',
                   ),
                 ),
@@ -458,7 +458,7 @@ class _EmptyLibraryCard extends StatelessWidget {
             const SizedBox(height: 24),
             // Белая пилюля
             SizedBox(
-              height: 48,
+              height: 42,
               child: ElevatedButton(
                 onPressed: onFindBooks,
                 style: ElevatedButton.styleFrom(
@@ -467,15 +467,15 @@ class _EmptyLibraryCard extends StatelessWidget {
                   foregroundColor:
                       isDark ? const Color(0xFF1A1A1A) : Colors.white,
                   elevation: 0,
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  padding: const EdgeInsets.symmetric(horizontal: 22),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
+                    borderRadius: BorderRadius.circular(21),
                   ),
                 ),
                 child: const Text(
                   'Найти интересные книги',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),
                 ),

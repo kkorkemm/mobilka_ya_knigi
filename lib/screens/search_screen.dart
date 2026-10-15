@@ -153,10 +153,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: GestureDetector(
-          // Тап по пустому месту — снять фокус.
-          onTap: () => _focus.unfocus(),
-          child: Column(
+        child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // ---------- Строка поиска: ← [поле] × ----------
@@ -198,6 +195,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         onSubmitted: _performSearch,
                         cursorColor: AppColors.accent,
                         style: const TextStyle(fontSize: 16),
+                        onTapOutside: (_) {}, // не снимать фокус автоматически
                         decoration: InputDecoration(
                           isDense: true,
                           hintText: 'Книги, авторы, жанры',
@@ -262,8 +260,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildBody(AppState state) {
@@ -278,7 +275,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 context.read<AppState>().removeSearchQuery(q),
             onClearQueries: () =>
                 context.read<AppState>().clearSearchHistory(),
-            recentBooks: state.recentlyViewedBooks,
+            recentBooks: state.searchOpenedBooks,
             onBookTap: (id) => Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (_) => BookDetailsScreen(editionId: id),
@@ -630,11 +627,15 @@ class _ResultsView extends StatelessWidget {
         final book = results[i];
         return BookRow(
           book: book,
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => BookDetailsScreen(editionId: book.id),
-            ),
-          ),
+          onTap: () {
+            // Открытие из результатов → книга попадёт в «Историю поиска».
+            context.read<AppState>().addSearchOpened(book.id);
+            Navigator.of(context, rootNavigator: false).push(
+              MaterialPageRoute(
+                builder: (_) => BookDetailsScreen(editionId: book.id),
+              ),
+            );
+          },
         );
       },
     );

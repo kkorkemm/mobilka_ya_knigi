@@ -219,6 +219,18 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  final List<String> _searchOpenedIds = <String>[];
+  List<String> get searchOpenedIds => List.unmodifiable(_searchOpenedIds);
+
+  List<BookEdition> get searchOpenedBooks => editionsByIds(_searchOpenedIds);
+
+  void addSearchOpened(String id) {
+    _searchOpenedIds.remove(id);
+    _searchOpenedIds.insert(0, id);
+    if (_searchOpenedIds.length > 10) _searchOpenedIds.removeLast();
+    notifyListeners();
+  }
+
   // ============================================================
   // Полки
   // ============================================================

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -127,13 +128,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                     child: Center(
-                      child: BookCover(
-                        book: book,
-                        width: 200,
-                        height: 288,
-                        radius: 8,
-                        heroTag: 'cover_${book.id}',
-                      ),
+                      child: _CoverWithGlow(book: book),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -555,12 +550,12 @@ class _ReadListenButtons extends StatelessWidget {
     final fg = isDark ? const Color(0xFF1A1A1A) : Colors.white;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Container(
-        height: 52,
+        height: 46,
         decoration: BoxDecoration(
           color: bg,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(50),
         ),
         child: Row(
           children: [
@@ -568,13 +563,13 @@ class _ReadListenButtons extends StatelessWidget {
               child: InkWell(
                 onTap: onRead,
                 borderRadius: const BorderRadius.horizontal(
-                  left: Radius.circular(14),
+                  left: Radius.circular(10),
                 ),
                 child: Center(
                   child: Text('Читать',
                       style: TextStyle(
                           color: fg,
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.w700)),
                 ),
               ),
@@ -588,13 +583,13 @@ class _ReadListenButtons extends StatelessWidget {
               child: InkWell(
                 onTap: onListen,
                 borderRadius: const BorderRadius.horizontal(
-                  right: Radius.circular(14),
+                  right: Radius.circular(10),
                 ),
                 child: Center(
                   child: Text('Слушать',
                       style: TextStyle(
                           color: fg,
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.w700)),
                 ),
               ),
@@ -817,7 +812,7 @@ class _BookCarousel extends StatelessWidget {
     final secondary = Theme.of(context).textTheme.bodySmall?.color;
 
     return SizedBox(
-      height: 220,
+      height: 235,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -1264,7 +1259,7 @@ class _ImpressionCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-              color: tagBg,
+              color: Color.fromARGB(255, 255, 245, 188),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
@@ -1305,6 +1300,65 @@ class _ImpressionCard extends StatelessWidget {
               const Spacer(),
               _ActionIcon(icon: Icons.ios_share_rounded),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+  
+}
+
+// ============================================================
+// Обложка с размытым «облаком» позади
+// ============================================================
+
+class _CoverWithGlow extends StatelessWidget {
+  final BookEdition book;
+
+  const _CoverWithGlow({required this.book});
+
+  @override
+  Widget build(BuildContext context) {
+    // У аудиокниг обложка квадратная, у текстовых — вертикальная.
+    final isAudio = book.isAudio;
+    final w = isAudio ? 260.0 : 200.0;
+    final h = isAudio ? 260.0 : 288.0;
+    final radius = isAudio ? 12.0 : 8.0;
+
+    // Облако чуть больше обложки.
+    final glowW = w + 60;
+    final glowH = h + 60;
+
+    return SizedBox(
+      width: glowW,
+      height: glowH,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Размытое облако
+          IgnorePointer(
+            child: Opacity(
+              opacity: 0.55,
+              child: ImageFiltered(
+                imageFilter: ImageFilter.blur(sigmaX: 48, sigmaY: 48),
+                child: BookCover(
+                  book: book,
+                  width: glowW,
+                  height: glowH,
+                  radius: 20,
+                  square: isAudio,
+                ),
+              ),
+            ),
+          ),
+          // Чёткая обложка
+          BookCover(
+            book: book,
+            width: w,
+            height: h,
+            radius: radius,
+            heroTag: 'cover_${book.id}',
+            square: isAudio,
           ),
         ],
       ),
